@@ -1,6 +1,8 @@
+import { ListComponent } from "./list/list";
 import { FeedItem, getItem } from "./utils/data.utils";
+import { db } from "./utils/db.utils";
 
-const template = ({ name, description, url }: FeedItem) => {
+const templateFn = ({ name, description, url }: FeedItem) => {
 	return `<section class="feed__item">
 	<img
 		class="feed__item__img"
@@ -16,17 +18,12 @@ const template = ({ name, description, url }: FeedItem) => {
 </section>`
 }
 
-const app = document.getElementById("app");
-const feed = document.createElement("div");
-feed.classList.add("feed");
+const DB_SIZE = 1000;
 
-const items = Array(1000)
-	.fill(null)
-	.map((_, index) => template(getItem(index)))
-	.join("")
-	.trim();
-
-feed.innerHTML = items;
-console.log(items);
-
-app.insertAdjacentElement("afterbegin", feed);
+const root: HTMLDivElement = document.getElementById("app") as HTMLDivElement;
+const DB = db(DB_SIZE, DB_SIZE, getItem);
+const feed = new ListComponent<FeedItem>(root, {
+	templateFn,
+	load: () => DB.load(0, 1000).then((cursor) => cursor.chunk)
+});
+feed.render();
