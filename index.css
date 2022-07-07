@@ -21,3 +21,12 @@ body {
 	flex-shrink: 0;
 	box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.1);
 }
+
+.intersection-observer {
+	width: 70%;
+	height: 48px;
+	border: 1px solid blue;
+	margin: 0 auto;
+	background-color: rgba(0, 0, 255, 0.25);
+	box-shadow: 0 0 7px 2px rgba(0, 0, 0, 0.1);
+}

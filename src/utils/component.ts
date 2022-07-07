@@ -1,4 +1,5 @@
-export abstract class Component<P extends {}> {
+export abstract class Component<P extends {}, S extends object = {}> {
+	protected state: S = null;
 	protected element: HTMLElement = null;
 	protected props: P = null;
 
@@ -10,6 +11,7 @@ export abstract class Component<P extends {}> {
 		this.element = document.createElement(this.getComponentTag());
 		this.element.id = this.getComponentId();
 		this.props = props;
+		this.init();
 	};
 	/**
 	 * Kind of React.setState() to update the component when data is changed
@@ -43,5 +45,10 @@ export abstract class Component<P extends {}> {
 	/**
 	 * Schedule any side-effects
 	 */
-	effect(): void {}
+	effect(): void {};
+	/**
+	 * Provide any init logic that's called in
+	 * constructor phase
+	 */
+	init(): void {};
 }

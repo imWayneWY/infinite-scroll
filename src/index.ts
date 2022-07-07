@@ -1,3 +1,4 @@
+import { LazyListComponent } from "./lazyList/lazyList";
 import { ListComponent } from "./list/list";
 import { FeedItem, getItem } from "./utils/data.utils";
 import { db } from "./utils/db.utils";
@@ -15,15 +16,16 @@ const templateFn = ({ name, description, url }: FeedItem) => {
 			${description}
 		</p>
 	</div>
-</section>`
+</section>`.trim();
 }
 
 const DB_SIZE = 1000;
 
 const root: HTMLDivElement = document.getElementById("app") as HTMLDivElement;
 const DB = db(DB_SIZE, DB_SIZE, getItem);
-const feed = new ListComponent<FeedItem>(root, {
+const feed = new LazyListComponent<FeedItem>(root, {
 	templateFn,
-	load: () => DB.load(0, 1000).then((cursor) => cursor.chunk)
+	load: (start, limit) => DB.load(start, limit).then((cursor) => cursor.chunk),
+	pageSize: 10
 });
 feed.render();
