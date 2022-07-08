@@ -1,5 +1,6 @@
-import { LazyListComponent } from "./lazyList/lazyList";
+import { LazyListComponent } from "./lazy-list/lazy-list";
 import { ListComponent } from "./list/list";
+import { VirtualListComponent } from "./virtual-list/virtual-list";
 import { FeedItem, getItem } from "./utils/data.utils";
 import { db } from "./utils/db.utils";
 
@@ -19,13 +20,25 @@ const templateFn = ({ name, description, url }: FeedItem) => {
 </section>`.trim();
 }
 
+const updateItemFn = (
+	element: HTMLElement,
+	{ url, description, name }: FeedItem
+) => {
+	element.style.display = null;
+	element.querySelector<HTMLImageElement>(".feed__item__img").src = null;
+	element.querySelector("h2").innerHTML = name;
+	element.querySelector("p").innerHTML = description;
+	return element;
+}
+
 const DB_SIZE = 1000;
 
 const root: HTMLDivElement = document.getElementById("app") as HTMLDivElement;
 const DB = db(DB_SIZE, DB_SIZE, getItem);
-const feed = new LazyListComponent<FeedItem>(root, {
+const feed = new VirtualListComponent<FeedItem>(root, {
 	templateFn,
 	load: (start, limit) => DB.load(start, limit).then((cursor) => cursor.chunk),
-	pageSize: 10
+	pageSize: 10,
+	updateItemFn
 });
 feed.render();
