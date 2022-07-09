@@ -31,7 +31,7 @@ export function intersectionObserver(
 	observerConfig = Object.assign(observerConfig ?? {}, defaultObserverConfig);
 	const observer = new IntersectionObserver(callback, observerConfig); // init observer
 	const element = document.createElement(tag); // Create a target element
-	element.classList.add("intersection-observer", className); // Add utility classname to the target element
+	element.classList.add("intersection-observer", ...(className).split(" ")); // Add utility classname to the target element
 	root.insertAdjacentElement(insertPosition, element); // Insert the target element into DOM
 	observer.observe(element); // Observer intersection of target element with viewpoint
 	return [element, observer]; // Return target element and observer object

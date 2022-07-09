@@ -24,8 +24,7 @@ const updateItemFn = (
 	element: HTMLElement,
 	{ url, description, name }: FeedItem
 ) => {
-	element.style.display = null;
-	element.querySelector<HTMLImageElement>(".feed__item__img").src = null;
+	element.querySelector<HTMLImageElement>(".feed__item__img").src = url;
 	element.querySelector("h2").innerHTML = name;
 	element.querySelector("p").innerHTML = description;
 	return element;
@@ -39,6 +38,7 @@ const feed = new VirtualListComponent<FeedItem>(root, {
 	templateFn,
 	load: (start, limit) => DB.load(start, limit).then((cursor) => cursor.chunk),
 	pageSize: 10,
-	updateItemFn
+	updateItemFn,
+	itemMargin: 20
 });
 feed.render();
